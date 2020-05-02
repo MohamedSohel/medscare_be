@@ -1,0 +1,21 @@
+services:
+  medscare.base_service:
+    abstract: true
+    class: AppBundle\Service\BaseService
+    calls:
+      - [setServiceContainer, ['@service_container']]
+      - [setEntityManager, ['@doctrine.orm.entity_manager']]
+  medscare.user_validate_service:
+    class: AppBundle\Service\UserApiValidationService
+    parent: medscare.base_service
+    public: true
+  medscare.api_response:
+    class: AppBundle\Service\ApiResponseService
+    parent: medscare.base_service
+    public: true
+  medscare.exception_listener:
+    class: AppBundle\EventListener\ExceptionListener
+    parent: medscare.base_service
+    tags:
+      - {name: kernel.event_listener, event: kernel.exception, method: onKernelException}
+    public: true
